@@ -1,23 +1,24 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-// Importamos los componentes visuales
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
-
-// 1. Importamos Clerk y el idioma ESPAÑOL
-import { ClerkProvider } from "@clerk/nextjs";
 import { esES } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Nunito } from "next/font/google";
+import "./globals.css";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
-// 2. Importamos el Provider de tu API/Contexto
-import { PetsProvider } from "@/contexts/PetsContext";
+// Configuración de la tipografía oficial unificada
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-nunito",
+});
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "VeciPets - Comunidad de Mascotas",
-  description: "Ayuda a encontrar mascotas perdidas y adopta.",
+export const metadata = {
+  title: "VeciPets",
+  description: "Red vecinal de apoyo animal para reportar mascotas perdidas y encontradas.",
+  icons: {
+    icon: "/logo.svg", // Vincula directamente el logo de la carpeta public/
+  },
 };
 
 export default function RootLayout({
@@ -26,29 +27,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // 3. Agregamos localization={esES} para que el Login salga en español
     <ClerkProvider localization={esES}>
-      <html lang="es">
-        {/* 4. suppressHydrationWarning={true} 
-           Esto evita el error rojo de las extensiones (como Grammarly) 
-        */}
-        <body className={inter.className} suppressHydrationWarning={true}>
+      <html lang="es" className={`${nunito.variable}`}>
+        {/* Usamos font-sans para heredar Nunito globalmente y min-h-screen con flex-col */}
+        <body className="antialiased min-h-screen flex flex-col bg-white text-[var(--color-vecipets-text-main)] font-sans">
           
-          <PetsProvider>
-            <div className="flex flex-col min-h-screen relative">
-              {/* Navbar fijo arriba */}
-              <Navbar />
-              
-              {/* Contenido principal que empuja el footer hacia abajo */}
-              <main className="grow container mx-auto p-4 w-full">
-                {children}
-              </main>
-              
-              {/* Footer siempre abajo */}
-              <Footer />
-            </div>
-          </PetsProvider>
+          {/* Componente de Navegación superior fijo global */}
+          <Navbar />
           
+          {/* Contenedor principal dinámico que empuja el footer hacia abajo */}
+          <main className="flex-grow w-full flex flex-col">
+            {children}
+          </main>
+          
+          {/* Componente unificado de Pie de Página (Inmune a duplicaciones) */}
+          <Footer />
+
+          {/* 🐾 BOTÓN FLOTANTE GLOBAL DE WHATSAPP INYECTADO:
+              Ubicado profesionalmente al final del body para que flote de manera independiente.
+          */}
+          <WhatsAppButton />
+
         </body>
       </html>
     </ClerkProvider>

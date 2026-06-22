@@ -1,7 +1,7 @@
 "use client";
 
+import { usePets } from "@/contexts/assets";
 import { FaTrash } from "react-icons/fa";
-import { usePets } from "@/contexts/PetsContext";
 
 // Definimos que el ID puede venir o no (opcional)
 interface DeleteButtonProps {

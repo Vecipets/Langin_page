@@ -67,9 +67,9 @@ export default function Cuidados() {
   // Cada categoría está desacoplada en un objeto para mantener el código más limpio
   const categories = [
     { id: "alimentacion", label: "Alimentación", icon: <FaUtensils />, color: "bg-orange-100 text-orange-700 border-orange-200" },
-    { id: "higiene", label: "Higiene", icon: <FaShower />, color: "bg-blue-100 text-blue-700 border-blue-200" },
-    { id: "salud", label: "Salud", icon: <FaUserMd />, color: "bg-red-100 text-red-700 border-red-200" },
-    { id: "emocionales", label: "Emocional", icon: <FaBrain />, color: "bg-purple-100 text-purple-700 border-purple-200" },
+    { id: "higiene", label: "Higiene", icon: <FaShower />, color: "bg-[#e8f7f5] text-[#0b6f6a] border-[#bde3df]" },
+    { id: "salud", label: "Salud", icon: <FaUserMd />, color: "bg-[#fff2e6] text-[#b64b0d] border-[#ffc99d]" },
+    { id: "emocionales", label: "Emocional", icon: <FaBrain />, color: "bg-[#edf8e8] text-[#2f7d32] border-[#cce9c1]" },
     { id: "especiales", label: "Rescate", icon: <FaStar />, color: "bg-yellow-100 text-yellow-700 border-yellow-200" },
   ];
 
@@ -78,10 +78,10 @@ export default function Cuidados() {
 
       {/* ------------------ TÍTULO PRINCIPAL ------------------ */}
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-extrabold text-[#4a3426] flex items-center justify-center gap-2">
-           Guía de Cuidados <FaPaw className="text-blue-400" />
+        <h2 className="text-3xl font-black text-[#17323a] flex items-center justify-center gap-2">
+           Guía de Cuidados <FaPaw className="text-[#0f8f88]" />
         </h2>
-        <p className="text-gray-500 mt-2">Todo lo que necesitas para una mascota feliz.</p>
+        <p className="text-[#596b68] font-semibold mt-2">Todo lo que necesitas para una mascota feliz.</p>
       </div>
 
       {/* ------------------ BOTONES DE SECCIONES ------------------ */}
@@ -92,8 +92,8 @@ export default function Cuidados() {
           onClick={() => toggleSection("cuidados")}
           className={`p-4 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between shadow-sm group ${
             activeTab === "cuidados" 
-            ? "bg-[#4a3426] border-[#4a3426] text-white scale-105"
-            : "bg-blue-200 border-gray-200 text-gray-600 hover:border-[#4a3426] hover:text-[#4a3426]"
+            ? "bg-[#0f8f88] border-[#0f8f88] text-white scale-105"
+            : "bg-white border-[#bde3df] text-[#596b68] hover:border-[#0f8f88] hover:text-[#0f8f88]"
           }`}
         >
           <div className="flex items-center gap-3">
@@ -112,13 +112,13 @@ export default function Cuidados() {
           onClick={() => toggleSection("bienestar")}
           className={`p-4 rounded-2xl border-2 transition-all duration-300 flex items-center justify-between shadow-sm group ${
             activeTab === "bienestar" 
-            ? "bg-[#C9E9FF] border-[#C9E9FF] text-[#4a3426] scale-105"
-            : "bg-blue-200 border-gray-200 text-gray-600 hover:border-[#C9E9FF] hover:text-[#4a3426]"
+            ? "bg-[#fff2d5] border-[#ffdc8a] text-[#17323a] scale-105"
+            : "bg-white border-[#bde3df] text-[#596b68] hover:border-[#ffdc8a] hover:text-[#9a5a00]"
           }`}
         >
           <div className="flex items-center gap-3">
             {/* Ícono del botón */}
-            <div className={`p-2 rounded-full ${activeTab === "bienestar" ? "bg-white/40" : "bg-gray-100 group-hover:bg-blue-100"}`}>
+            <div className={`p-2 rounded-full ${activeTab === "bienestar" ? "bg-white/40" : "bg-[#fff2d5] group-hover:bg-[#ffedbe]"}`}>
                <FaHandHoldingHeart />
             </div>
             <span className="font-bold text-lg">Centro de Bienestar</span>
@@ -130,8 +130,8 @@ export default function Cuidados() {
       {/* ------------------ CONTENIDO SECCIÓN: CUIDADOS ------------------ */}
       {activeTab === "cuidados" && (
         <div className="w-full max-w-3xl animate-in slide-in-from-top-4 fade-in duration-300">
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <p className="text-center text-gray-500 mb-4 font-medium">Selecciona una categoría para ver tips:</p>
+          <div className="bg-white p-6 rounded-3xl shadow-lg shadow-[#0f8f88]/10 border border-[#bde3df]">
+            <p className="text-center text-[#596b68] mb-4 font-bold">Selecciona una categoría para ver tips:</p>
 
             {/* Grid de categorías de cuidados */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -153,41 +153,41 @@ export default function Cuidados() {
       {/* ------------------ CONTENIDO SECCIÓN: BIENESTAR ------------------ */}
       {activeTab === "bienestar" && (
         <div className="w-full max-w-3xl animate-in zoom-in-95 duration-300">
-          <div className="bg-blue-200 p-8 rounded-3xl shadow-lg border border-blue-100 relative overflow-hidden">
+          <div className="bg-[#e8f7f5] p-8 rounded-3xl shadow-lg shadow-[#0f8f88]/10 border border-[#bde3df] relative overflow-hidden">
 
             {/* Decoración visual */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#fff2d5] rounded-bl-full"></div>
 
-            <h3 className="text-2xl font-bold text-[#4a3426] mb-6 flex items-center gap-2 relative z-10">
-              Bienestar Animal <FaHandHoldingHeart className="text-blue-500" />
+            <h3 className="text-2xl font-black text-[#17323a] mb-6 flex items-center gap-2 relative z-10">
+              Bienestar Animal <FaHandHoldingHeart className="text-[#0f8f88]" />
             </h3>
 
             {/* Tarjetas de contacto */}
             <div className="space-y-4 relative z-10">
 
               {/* Teléfono */}
-              <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-xl">
+              <div className="flex items-center gap-3 text-[#17323a] bg-white p-3 rounded-xl">
                  <div className="bg-green-100 text-green-600 p-2 rounded-full"><FaPhone /></div>
                  <div>
-                    <p className="text-xs text-gray-500 font-bold uppercase">Emergencias</p>
+                    <p className="text-xs text-[#596b68] font-bold uppercase">Emergencias</p>
                     <p className="font-bold text-lg">+57 320 594 5135</p>
                  </div>
               </div>
 
               {/* Correo */}
-              <div className="flex items-center gap-3 text-gray-700 bg--50 p-3 rounded-xl">
-                 <div className="bg-blue-100 text-blue-600 p-2 rounded-full"><FaEnvelope /></div>
+              <div className="flex items-center gap-3 text-[#17323a] bg-white p-3 rounded-xl">
+                 <div className="bg-[#e8f7f5] text-[#0f8f88] p-2 rounded-full"><FaEnvelope /></div>
                  <div className="overflow-hidden">
-                    <p className="text-xs text-gray-500 font-bold uppercase">Correo Electrónico</p>
+                    <p className="text-xs text-[#596b68] font-bold uppercase">Correo Electrónico</p>
                     <p className="text-sm font-medium truncate">gabrielamorenorodriguez44@gmail.com</p>
                  </div>
               </div>
 
               {/* Horario */}
-              <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-xl">
-                 <div className="bg-purple-100 text-purple-600 p-2 rounded-full"><FaClock /></div>
+              <div className="flex items-center gap-3 text-[#17323a] bg-white p-3 rounded-xl">
+                 <div className="bg-[#fff2d5] text-[#9a5a00] p-2 rounded-full"><FaClock /></div>
                  <div>
-                    <p className="text-xs text-gray-500 font-bold uppercase">Horario de Atención</p>
+                    <p className="text-xs text-[#596b68] font-bold uppercase">Horario de Atención</p>
                     <p className="font-medium">Lun - Sab: 8:00 am - 6:00 pm</p>
                  </div>
               </div>
@@ -204,7 +204,7 @@ export default function Cuidados() {
       {/* ------------------ TARJETA DE INFORMACIÓN ------------------ */}
       {info && activeTab === "cuidados" && (
         <div className="w-full max-w-3xl mt-6 animate-in slide-in-from-bottom-6 fade-in duration-500">
-          <div className="bg-[#4a3426] text-white p-6 rounded-3xl shadow-xl relative">
+          <div className="bg-[#0b6f6a] text-white p-6 rounded-3xl shadow-xl relative">
 
             {/* Botón para cerrar la tarjeta */}
             <button 

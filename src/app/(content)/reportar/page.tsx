@@ -7,7 +7,7 @@ import { FaCamera, FaCat, FaCheckCircle, FaDog } from "react-icons/fa";
 
 
 // Contexto de mascotas
-import { usePets } from "@/contexts/PetsContext";
+import { usePets } from "@/contexts/assets";
 
 /* =====================================================
     TIPO DE DATOS DE UNA MASCOTA
@@ -150,14 +150,14 @@ export default function ReportarPage() {
   ====================================================== */
   return (
     <div className="max-w-2xl mx-auto pb-10">
-      <h1 className="text-3xl font-bold text-[#4a3426] text-center py-6">
+      <h1 className="text-3xl font-black text-[#17323a] text-center py-6">
         Reportar Mascota 📢
       </h1>
 
       {/* FORMULARIO */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-6"
+        className="bg-white p-6 rounded-3xl shadow-lg shadow-[#0f8f88]/10 border border-[#bde3df] space-y-6"
       >
         {/* ====================== TIPO DE MASCOTA ====================== */}
         <div className="flex gap-4">
@@ -165,7 +165,7 @@ export default function ReportarPage() {
             type="button"
             onClick={() => setTipo("Perro")}
             className={`flex-1 py-4 rounded-xl border-2 flex flex-col items-center transition ${
-              tipo === "Perro" ? "border-orange-500 bg-orange-50" : "border-gray-200"
+              tipo === "Perro" ? "border-[#0f8f88] bg-[#e8f7f5] text-[#0b6f6a]" : "border-[#bde3df] bg-white text-[#596b68]"
             }`}
           >
             <FaDog className="text-2xl" /> Perro
@@ -175,7 +175,7 @@ export default function ReportarPage() {
             type="button"
             onClick={() => setTipo("Gato")}
             className={`flex-1 py-4 rounded-xl border-2 flex flex-col items-center transition ${
-              tipo === "Gato" ? "border-orange-500 bg-orange-50" : "border-gray-200"
+              tipo === "Gato" ? "border-[#0f8f88] bg-[#e8f7f5] text-[#0b6f6a]" : "border-[#bde3df] bg-white text-[#596b68]"
             }`}
           >
             <FaCat className="text-2xl" /> Gato
@@ -189,11 +189,11 @@ export default function ReportarPage() {
 
         {/* Descripción */}
         <div>
-          <label className="font-bold text-gray-700">Descripción</label>
+          <label className="font-bold text-[#17323a]">Descripción</label>
           <textarea
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
-            className="w-full p-3 border rounded-xl mt-1"
+            className="w-full p-3 mt-1"
             required
           />
         </div>
@@ -203,7 +203,7 @@ export default function ReportarPage() {
 
         {/* ====================== FOTO ====================== */}
         <div>
-          <label className="font-bold text-gray-700 block mb-2">Foto</label>
+          <label className="font-bold text-[#17323a] block mb-2">Foto</label>
 
           <input
             type="file"
@@ -215,7 +215,7 @@ export default function ReportarPage() {
 
           <label
             htmlFor="subir-foto"
-            className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer h-40 relative overflow-hidden"
+            className="border-2 border-dashed border-[#bde3df] bg-[#fbfcf7] rounded-xl p-4 text-center cursor-pointer h-40 relative overflow-hidden transition hover:border-[#0f8f88]"
           >
             {foto ? (
               <img
@@ -224,8 +224,8 @@ export default function ReportarPage() {
               />
             ) : (
               <>
-                <FaCamera className="text-2xl mb-2 text-gray-400" />
-                <p className="text-gray-500 text-sm">Clic para subir foto</p>
+                <FaCamera className="text-2xl mb-2 text-[#0f8f88]" />
+                <p className="text-[#596b68] text-sm font-semibold">Clic para subir foto</p>
               </>
             )}
           </label>
@@ -233,10 +233,10 @@ export default function ReportarPage() {
 
      {/* ====================== MAPA ====================== */}
         <div>
-          <label className="font-bold text-gray-700">Ubicación</label>
-          <p className="text-xs text-gray-500 mb-2">Toca el mapa para marcar dónde la viste.</p>
+          <label className="font-bold text-[#17323a]">Ubicación</label>
+          <p className="text-xs text-[#596b68] mb-2">Toca el mapa para marcar dónde la viste.</p>
           
-          <div className="h-64 rounded-xl overflow-hidden border border-gray-300 relative z-0">
+          <div className="h-64 rounded-xl overflow-hidden border border-[#bde3df] relative z-0">
             {/* AQUÍ ESTÁ EL CAMBIO IMPORTANTE */}
             <DynamicSelector
               onLocationSelect={(coords: [number, number]) => setUbicacion(coords)}
@@ -245,7 +245,7 @@ export default function ReportarPage() {
           </div>
 
           {ubicacion && (
-            <p className="text-green-600 mt-1 flex items-center gap-1 font-bold">
+            <p className="text-[#0f8f88] mt-1 flex items-center gap-1 font-bold">
               <FaCheckCircle /> Coordenadas guardadas: {ubicacion[0].toFixed(4)}, {ubicacion[1].toFixed(4)}
             </p>
           )}
@@ -255,8 +255,8 @@ export default function ReportarPage() {
         <button
           type="submit"
           disabled={guardando}
-          className={`w-full text-white font-bold py-4 rounded-xl shadow-md transition ${
-            guardando ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
+          className={`w-full text-white font-black py-4 rounded-xl shadow-md transition ${
+            guardando ? "bg-[#8aa09d]" : "bg-[#0f8f88] hover:bg-[#0b6f6a]"
           }`}
         >
           {guardando ? "Guardando..." : "Publicar alerta"}
@@ -280,12 +280,12 @@ function CampoTexto({
 }) {
   return (
     <div>
-      <label className="font-bold text-gray-700">{label}</label>
+      <label className="font-bold text-[#17323a]">{label}</label>
       <input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full p-3 border rounded-xl mt-1"
+        className="w-full p-3 mt-1"
         required
       />
     </div>

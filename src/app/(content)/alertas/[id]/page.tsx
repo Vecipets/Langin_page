@@ -4,7 +4,7 @@
 import { use } from "react";
 // "use" permite resolver promesas directamente en un componente cliente.
 
-import { usePets } from "@/contexts/PetsContext";
+import { usePets } from "@/contexts/assets";
 // Contexto global donde están guardadas todas las mascotas.
 
 import { notFound, useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ export default function AlertaDetallePage(props: { params: Promise<{ id: string 
   const router = useRouter();
 
   // Mientras carga la información mostramos mensaje
-  if (isLoading) return <p>Cargando...</p>;
+  if (isLoading) return <p className="p-6 text-center font-bold text-[#0f8f88]">Cargando...</p>;
 
   // Buscamos la mascota correspondiente al ID recibido
   const mascota = pets.find((p) => p.id === id);
@@ -39,19 +39,19 @@ export default function AlertaDetallePage(props: { params: Promise<{ id: string 
     <div className="flex justify-center p-6">
 
       {/* Contenedor principal del card */}
-      <div className="bg-white border rounded-xl shadow-lg p-6 w-full max-w-md">
+      <div className="bg-white border border-[#bde3df] rounded-2xl shadow-lg shadow-[#0f8f88]/10 p-6 w-full max-w-md">
 
         {/* BOTÓN VOLVER */}
         {/* Navega de regreso a la ruta /alertas */}
         <button
           onClick={() => router.push("/alertas")}
-          className="mb-4 px-4 py-2 bg-blue-100 text-gray-500 rounded-lg hover:bg-gray-200 transition"
+          className="mb-4 px-4 py-2 bg-[#e8f7f5] text-[#0b6f6a] rounded-xl font-black hover:bg-[#d9f5f2] transition"
         >
           ← Volver a Alertas
         </button>
 
         {/* Título del detalle */}
-        <h1 className="text-2xl font-bold mb-4 text-center">
+        <h1 className="text-2xl font-black mb-4 text-center text-[#17323a]">
           Detalle de Alerta
         </h1>
 
@@ -65,7 +65,7 @@ export default function AlertaDetallePage(props: { params: Promise<{ id: string 
         )}
 
         {/* Nombre */}
-        <h2 className="text-xl font-semibold mb-2 text-center">
+        <h2 className="text-xl font-black mb-2 text-center text-[#0b6f6a]">
           {mascota.nombre}
         </h2>
 
@@ -78,7 +78,7 @@ export default function AlertaDetallePage(props: { params: Promise<{ id: string 
         <p><strong>Fecha:</strong> {mascota.fecha}</p>
 
         {/* Descripción */}
-        <p className="mt-2">
+        <p className="mt-2 text-[#596b68]">
           <strong>Descripción:</strong> {mascota.descripcion}
         </p>
 

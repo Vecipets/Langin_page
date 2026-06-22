@@ -137,7 +137,7 @@ const Mapa = ({ markers = [] }: MapProps) => {
                   className={`text-base ${
                     colorIcono === "orange"
                       ? "text-orange-600"
-                      : "text-blue-600"
+                      : "text-[#0f8f88]"
                   }`}
                 >
                   {marker.title}
@@ -153,7 +153,7 @@ const Mapa = ({ markers = [] }: MapProps) => {
                 </Link>
 
                 ) : (
-                  <span className="text-xs text-gray-500 font-medium">
+                  <span className="text-xs text-[#596b68] font-medium">
                     Refugio / Veterinaria 🏥
                   </span>
                 )}

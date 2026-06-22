@@ -7,10 +7,10 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
 
   return (
-    <form className="flex flex-col gap-3">
-      <input className="border p-2 rounded" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-      <input className="border p-2 rounded" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-      <button className="px-3 py-2 rounded bg-black text-white" type="submit">Entrar</button>
+    <form className="flex flex-col gap-4">
+      <input className="px-4 py-3 font-semibold" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Correo electronico" />
+      <input className="px-4 py-3 font-semibold" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contrasena" />
+      <button className="rounded-xl bg-[#0f8f88] px-4 py-3 font-black text-white shadow-md transition hover:bg-[#0b6f6a]" type="submit">Entrar</button>
     </form>
   );
 }

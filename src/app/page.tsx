@@ -1,149 +1,276 @@
-import Link from "next/link";
-// Importación de componentes de iconos vectoriales (SVG) de React Icons.
-import { FaBell, FaHeart, FaMapMarkedAlt, FaSearch, FaUserFriends, FaBullhorn, FaHome } from "react-icons/fa";
-// Importación del componente de registro modal para gestionar el flujo de autenticación (Auth Flow) vía Clerk.
-import { SignUpButton } from "@clerk/nextjs";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import FeaturesSection from "@/components/layout/FeaturesSection";
+import HowItWorksSection from "@/components/layout/HowItWorksSection";
+import TargetAudienceSection from "@/components/layout/TargetAudienceSection";
+import PeluditosSection from "@/components/sections/PeluditosSection";
+import { IMAGENES_LANDING } from "@/contexts/assets";
+
+export default function HomePage() {
+  const [formData, setFormData] = useState({ nombre: "", correo: "" });
+  const [formEnviado, setFormEnviado] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.nombre && formData.correo) {
+      setFormEnviado(true);
+      setFormData({ nombre: "", correo: "" });
+    }
+  };
 
   return (
-     // Contenedor de layout principal: estructura flexbox para apilamiento vertical con espaciado uniforme.
-    <div className="flex flex-col gap-16 pb-10">
+    <div className="w-full min-h-screen flex flex-col bg-[var(--color-vecipets-background)] overflow-x-hidden">
       
-      {/* --- 2. SECCIÓN HERO (LA PORTADA) --- 
-      La combinación 'relative z-0' establece un nuevo Stacking Context (contexto de apilamiento)
-     para asegurar la correcta superposición del Navbar fijo sobre esta sección.
-      */}
-      <section className="relative z-0 bg-[#C9E9FF] rounded-3xl overflow-hidden p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between shadow-sm mx-4 mt-4">
-        
-        <div className="max-w-xl space-y-6 relative z-10">
-          {/* Título H1: Define la jerarquía semántica y es crucial para el SEO de la Landing Page. */}
-          <h1 className="text-4xl md:text-6xl font-extrabold text-[#4a3426] leading-tight">
-            Unidos por una <span className="text-orange-600">huella</span> 🐾
-          </h1>
-          <p className="text-lg text-[#4a3426]/80 font-medium">
-            La comunidad digital para proteger y cuidar a nuestras mascotas en el Valle de Aburrá.
-          </p>
-
-         {/* Contenedor de Call-to-Action (CTA) primarios, diseñado para ser responsive (columna a fila). */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            {/* Uso de next/link para optimizar la navegación cliente-side (prefetching). */}
-            <Link href="/mapa" className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold text-lg hover:bg-orange-600 transition shadow-lg flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
-              <FaMapMarkedAlt /> Ver Mapa
-            </Link>
-            <Link href="/reportar" className="bg-white text-[#4a3426] px-6 py-3 rounded-xl font-bold text-lg hover:bg-gray-50 transition shadow-md border-2 border-[#4a3426]/10 flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
-              <FaBell /> Reportar
-            </Link>
+      {/* ================= 1. HERO SECTION (IMAGEN INTERACTIVA DESPLAZADA Y DINÁMICA) ================= */}
+      <section className="w-full px-6 pt-4 pb-12 md:pt-6 md:pb-16 lg:pt-8 lg:pb-20 max-w-7xl mx-auto bg-transparent overflow-hidden">
+        <div className="grid gap-8 lg:gap-12 items-center grid-cols-1 lg:grid-cols-12">
+          
+          {/* Bloque Izquierdo: Copywriting */}
+          <div className="lg:col-span-7 flex flex-col space-y-5 text-center lg:text-left items-center lg:items-start z-10">
+            <div className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary-mint)] border-2 border-dashed border-[#5E7BC4]/40 px-4 py-2 text-xs font-black text-[var(--color-primary-cyan)] shadow-2xs select-none">
+              📍 Red vecinal de apoyo animal en Medellín
+            </div>
+            
+            <h1 className="text-4xl font-black text-slate-900 leading-[1.15] tracking-tight sm:text-5xl lg:text-6xl max-w-xl">
+              Reúne a las mascotas con sus familias.
+            </h1>
+            
+            <p className="text-base font-semibold leading-relaxed text-slate-500 max-w-lg">
+              VeciPets es una plataforma comunitaria diseñada para reportar de forma eficiente mascotas perdidas y encontradas, connecting de inmediato con vecinos de tu misma zona.
+            </p>
+            
+            <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-4 pt-2 justify-center lg:justify-start">
+              <a href="/alertas" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F3B26C] border-2 border-slate-900 hover:brightness-105 px-8 py-4 text-sm font-black text-white shadow-[3px_3px_0px_0px_rgba(23,50,58,1)] active:translate-y-0.5 active:shadow-none transition-all duration-200">
+                🐾 Ver centro de alertas
+              </a>
+              <a href="#unirse" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--color-primary-cyan)] border-2 border-slate-900 hover:brightness-110 px-8 py-4 text-sm font-black text-white shadow-[3px_3px_0px_0px_rgba(23,50,58,1)] active:translate-y-0.5 active:shadow-none transition-all duration-200">
+                🐾 Registrar mascota
+              </a>
+            </div>
           </div>
 
-          {/* --- 3. PRUEBA SOCIAL (SOCIAL PROOF) ---*/}
-          <div className="flex items-center gap-4 justify-center md:justify-start pt-2">
-            <div className="flex -space-x-3">
-             {/* Elementos UI estáticos para simular avatares y generar confianza/percepción de actividad (engagement). */}
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-blue-400 flex items-center justify-center text-xs text-white font-bold">JD</div>
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-red-400 flex items-center justify-center text-xs text-white font-bold">MA</div>
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-green-400 flex items-center justify-center text-xs text-white font-bold">Lu</div>
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-xs text-gray-600 font-bold">+500</div>
+          {/* Bloque Derecho: Imagen Dinámica desplazada hacia la izquierda */}
+          <div className="lg:col-span-5 w-full flex justify-center lg:justify-start lg:-ml-10 z-0">
+            <div className="relative w-full max-w-md aspect-square bg-white p-3 rounded-[2.5rem] border-2 border-dashed border-[#5E7BC4] shadow-[8px_8px_0px_0px_rgba(94,123,196,1)] transform -rotate-2 hover:rotate-0 hover:-translate-y-2 hover:shadow-[10px_10px_0px_0px_rgba(243,178,108,1)] transition-all duration-300 ease-out group cursor-pointer">
+              
+              <div className="w-full h-full rounded-[1.8rem] overflow-hidden bg-slate-50">
+                <img 
+                  src={IMAGENES_LANDING.hero.mascotaPrincipal} 
+                  alt="Mascota feliz de la comunidad"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
+              <div className="absolute -top-3 -right-3 bg-slate-950 text-white border-2 border-slate-900 text-[10px] font-black px-3 py-1.5 rounded-xl rotate-12 shadow-md uppercase tracking-wider select-none group-hover:scale-110 transition-transform duration-200">
+                Comunidad 🐕
+              </div>
+
             </div>
-            <p className="text-sm font-semibold text-[#4a3426]/80">
-              Vecinos conectados <br/> <span className="text-green-600">● 12 en línea ahora</span>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ================= 2. PROPUESTA DE VALOR (DISEÑO ASIMÉTRICO Y FLOTANTE DINÁMICO) ================= */}
+      <section className="w-full px-6 py-16 bg-transparent overflow-hidden">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Bloque Izquierdo: Título Fijo */}
+            <div className="lg:col-span-5 flex flex-col space-y-4 text-center lg:text-left items-center lg:items-start">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#5E7BC4] bg-[#5E7BC4]/10 px-4 py-1.5 rounded-full inline-block select-none">
+                ¿Qué hacemos?
+              </span>
+              <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight max-w-sm">
+                Centralizamos reportes geolocalizados para actuar rápido.
+              </h2>
+            </div>
+
+            {/* Bloque Derecho: Tarjeta Flotante con Hover */}
+            <div className="lg:col-span-7 w-full">
+              <div className="bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(94,123,196,1)] rounded-[2.2rem] p-6 md:p-8 transform hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(94,123,196,1)] transition-all duration-300 group">
+                <div className="flex gap-4 items-start">
+                  <div className="shrink-0 text-2xl bg-slate-100 w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 group-hover:scale-110 transition-transform duration-300 select-none">
+                    ⚡
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <p className="text-sm md:text-base font-bold text-slate-700 leading-relaxed">
+                      A diferencia de las redes sociales tradicionales, en <span className="text-[#5E7BC4] font-black">VeciPets</span> creamos alertas limpias organizadas por tu propio barrio.
+                    </p>
+                    <div className="w-8 h-0.5 bg-[#5E7BC4]/30 rounded-full transition-all group-hover:w-16 duration-300" />
+                    <p className="text-xs md:text-sm font-semibold text-slate-500 leading-relaxed">
+                      Usamos tu azul de confianza para conectar de forma directa a toda la comunidad, evitando algoritmos caóticos y asegurando que cada segundo cuente cuando una mascota se extravía.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 3. SECCIONES MODULARES ================= */}
+      <FeaturesSection />
+      <HowItWorksSection />
+      <PeluditosSection />
+      <TargetAudienceSection />
+
+      {/* ================= 4. FORMULARIO DE CONVERSIÓN ================= */}
+      <section id="unirse" className="w-full bg-[var(--color-vecipets-background)] py-20 border-b border-[var(--color-vecipets-card-border)]">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16 grid gap-12 grid-cols-1 lg:grid-cols-12 items-center">
+          
+          {/* Lado Izquierdo: Imagen de Persona Amorosa */}
+          <div className="lg:col-span-5 w-full flex items-center justify-center">
+            <div className="w-full max-w-sm aspect-[4/3] relative rounded-[2rem] overflow-hidden bg-white border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(23,50,58,1)] p-2">
+              <div className="w-full h-full rounded-[1.4rem] overflow-hidden bg-slate-100">
+                <img 
+                  src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&q=80&w=800" 
+                  alt="Persona amorosa abrazando a su mascota"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Lado Derecho: Tarjeta de Formulario Brutalista */}
+          <div className="lg:col-span-7 w-full flex flex-col space-y-6">
+            <div className="space-y-2 text-center lg:text-left">
+              <h2 className="text-3xl font-black tracking-tight text-slate-900">
+                Únete a la red de guardianes
+              </h2>
+              <p className="text-sm font-bold leading-relaxed text-slate-600 max-w-md mx-auto lg:mx-0">
+                Déjanos tus datos para recibir alertas inmediatas sobre mascotas perdidas o encontradas en tu zona y entérate de las jornadas de cuidado animal en Medellín.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border-2 border-slate-900 shadow-[6px_6px_0px_0px_rgba(94,123,196,1)] w-full max-w-xl mx-auto lg:mx-0">
+              {formEnviado ? (
+                <div className="text-center py-8 space-y-3">
+                  <span className="text-4xl block">🎉</span>
+                  <h3 className="text-lg font-black text-slate-900">¡Registro exitoso!</h3>
+                  <p className="text-xs font-semibold text-slate-600">
+                    Gracias por sumarte a VeciPets. Pronto recibirás alertas prioritarias de tu zona.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="space-y-5">
+                  <div>
+                    <label className="block text-[11px] font-black text-slate-900 uppercase tracking-wider mb-2">
+                      Nombre Completo
+                    </label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.nombre}
+                      onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                      placeholder="Ej. María Gómez" 
+                      className="w-full bg-slate-50 border-2 border-slate-900 text-slate-900 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:bg-white focus:shadow-[2px_2px_0px_0px_rgba(23,50,58,1)] transition-all placeholder-slate-400"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-[11px] font-black text-slate-900 uppercase tracking-wider mb-2">
+                      Correo Electrónico
+                    </label>
+                    <input 
+                      type="email" 
+                      required
+                      value={formData.correo}
+                      onChange={(e) => setFormData({...formData, correo: e.target.value})}
+                      placeholder="Ej. maria@correo.com" 
+                      className="w-full bg-slate-50 border-2 border-slate-900 text-slate-900 rounded-xl px-4 py-3 text-sm font-bold focus:outline-none focus:bg-white focus:shadow-[2px_2px_0px_0px_rgba(23,50,58,1)] transition-all placeholder-slate-400"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 bg-[#F3B26C] hover:bg-[#e2a15b] text-white font-black text-xs uppercase tracking-wider rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_0px_rgba(23,50,58,1)] active:translate-y-0.5 active:shadow-none transition-all cursor-pointer"
+                  >
+                    Unirme ahora como guardián
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ================= 5. PREGUNTAS FRECUENTES (BORDES DISCONTINUOS DE ALTO CONTRASTE) ================= */}
+      <section className="w-full px-4 py-20 bg-transparent">
+        <div className="mx-auto max-w-3xl space-y-8">
+          <div className="text-center space-y-2 flex flex-col items-center">
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#5E7BC4] bg-[#5E7BC4]/10 px-4 py-1.5 rounded-full inline-block border-2 border-dashed border-[#5E7BC4]/40 shadow-2xs select-none mb-2">
+              FAQ
+            </span>
+            <h2 className="text-3xl font-black tracking-tight text-slate-900">
+              Preguntas Frecuentes
+            </h2>
+            <p className="text-sm font-bold text-slate-500">
+              Resolvemos tus dudas principales antes de comenzar
             </p>
           </div>
-        </div>
-        
 
-        {/* --- 4. ANIMACIÓN DE RADAR Y SALTO --- 
-        Se utiliza la utilidad `animate-ping` para simular un efecto de onda radial
-       y `animate-bounce` para dar un efecto de movimiento recurrente. Esto mejora el Visual Feedback.
-*/}
-         <div className="hidden md:block relative w-80 h-80 mt-8 md:mt-0">
-            <div className="absolute inset-0 bg-white/40 rounded-full animate-ping opacity-75"></div>
-            <div className="relative w-full h-full bg-white/30 rounded-full flex items-center justify-center text-9xl shadow-inner backdrop-blur-sm z-10">
-            <span className="animate-bounce">🐶</span> 
-          </div>
-        </div>        
-      </section>
-
-  
-      <section className="bg-white py-12 border-y border-gray-100 relative z-0">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-[#4a3426] mb-10">¿Cómo funciona VeciPets?</h2>
-
-         {/*  Inicio de la sección de Onboarding/Feature Explanation. */}
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Elemento de diseño no funcional, oculto en móvil (`hidden md:block`). */}
-            <div className="hidden md:block absolute top-12 left-20 right-20 h-1 bg-gray-100 -z-10"></div>
-
-          {/* Paso 1: Módulo de Reporte */}
-            <div className="flex flex-col items-center group">
-            {/* Implementación de micro-interacciones con `group-hover:scale-110 transition`. */}
-              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-3xl mb-4 border-4 border-white shadow-sm group-hover:scale-110 transition">
-                <FaMapMarkedAlt />
-              </div>
-              <h3 className="font-bold text-xl mb-2">1. Reporta</h3>
-              <p className="text-gray-500 max-w-xs">Marca la ubicación exacta en el mapa donde viste o perdiste a la mascota.</p>
-            </div>
-
-            {/* Paso 2: Módulo de Notificación */}
-            <div className="flex flex-col items-center group">
-              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-3xl mb-4 border-4 border-white shadow-sm group-hover:scale-110 transition">
-                <FaBullhorn />
-              </div>
-              <h3 className="font-bold text-xl mb-2">2. Notifica</h3>
-              <p className="text-gray-500 max-w-xs">Tus vecinos reciben una alerta instantánea en sus celulares.</p>
-            </div>
-
-          {/* Paso 3: Módulo de Encuentro */}
-
-            <div className="flex flex-col items-center group">
-              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-3xl mb-4 border-4 border-white shadow-sm group-hover:scale-110 transition">
-                <FaHome />
-              </div>
-              <h3 className="font-bold text-xl mb-2">3. Encuentra</h3>
-              <p className="text-gray-500 max-w-xs">La comunidad ayuda a reunirte con tu peludo lo antes posible.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- CARACTERÍSTICAS SECUNDARIAS --- */}
-      <section className="container mx-auto px-4 relative z-0">
-        <h2 className="text-2xl font-bold text-center text-[#4a3426] mb-8">
-          Más herramientas para ti
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 p-6 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition cursor-pointer">
-            <div className="bg-white p-3 rounded-full text-blue-600 shadow-sm"><FaSearch size={24}/></div>
-            <div>
-              <h3 className="font-bold text-gray-800">Búsqueda Inteligente</h3>
-              <p className="text-sm text-gray-600">Filtra por raza, color o barrio.</p>
-            </div>
-          </div>
-          <div className="bg-purple-50 p-6 rounded-2xl flex items-center gap-4 hover:bg-purple-100 transition cursor-pointer">
-            <div className="bg-white p-3 rounded-full text-purple-600 shadow-sm"><FaUserFriends size={24}/></div>
-            <div>
-              <h3 className="font-bold text-gray-800">Comunidad Activa</h3>
-              <p className="text-sm text-gray-600">Comparte consejos y veterinarias.</p>
-            </div>
+          <div className="space-y-4">
+            {[
+              { 
+                q: "¿Tiene algún costo publicar un reporte de alerta?", 
+                a: "No, VeciPets es una plataforma 100% gratuita y solidaria orientada a salvaguardar el bienestar animal en la comunidad de Medellín." 
+              },
+              { 
+                q: "¿Cómo se verifica la validez de los reportes para evitar falsas alarmas?", 
+                a: "Los vecinos de la misma zona pueden interactuar, comentar y validar las publicaciones aportando fotos o pistas reales. Además, nuestro equipo filtra reportes duplicados de manera constante." 
+              },
+              { 
+                q: "¿Qué datos de contacto se muestran públicamente en el mapa?", 
+                a: "Para proteger tu privacidad, nunca mostraremos tu dirección exacta ni datos sensibles. El mapa solo ubica un punto de referencia aproximado y los canales de comunicación directa que tú decidas activar para el reencuentro." 
+              },
+              { 
+                q: "No vivo en Medellín, ¿puedo usar la plataforma en mi ciudad?", 
+                a: "Actualmente estamos priorizando y optimizando la red vecinal en los barrios de Medellín. Sin embargo, estamos trabajando para expandir el sistema de alertas a otras ciudades de Colombia muy pronto." 
+              },
+              { 
+                q: "¿Cómo me ayuda el unirme como 'Guardián' si no he perdido una mascota?", 
+                a: "Como guardián, recibes notificaciones críticas exclusivamente si una mascota se pierde en tu propio barrio o zona cercana. Tu apoyo revisando el mapa o prestando atención en tus salidas diarias es vital para salvar vidas." 
+              }
+            ].map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className={`border-2 border-dashed rounded-2xl overflow-hidden bg-white transition-all duration-200 ${
+                    isOpen 
+                      ? "border-[#5E7BC4] shadow-[4px_4px_0px_0px_rgba(94,123,196,0.15)] bg-slate-50/20" 
+                      : "border-slate-300 hover:border-[#5E7BC4] hover:shadow-[4px_4px_0px_0px_rgba(94,123,196,0.1)]"
+                  }`}
+                >
+                  <button 
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full px-6 py-5 text-left font-black text-sm text-slate-950 flex justify-between items-center hover:bg-[#5E7BC4]/5 transition-colors duration-200 cursor-pointer"
+                  >
+                    <span className="pr-4">{faq.q}</span>
+                    <span className={`text-xl font-black text-[#5E7BC4] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
+                      {isOpen ? "−" : "+"}
+                    </span>
+                  </button>
+                  <div 
+                    className={`transition-all duration-200 ease-in-out overflow-hidden ${
+                      isOpen ? "max-h-40 border-t-2 border-dashed border-[#5E7BC4] bg-white" : "max-h-0"
+                    }`}
+                  >
+                    <div className="px-6 py-4 text-xs font-bold leading-relaxed text-slate-600">
+                      {faq.a}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </section>
-
-      {/*  Sección final de Call to Action (CTA) para maximizar la conversión de usuario. */}
-
-      <section className="bg-[#4a3426] text-white rounded-3xl p-10 text-center mx-4 relative z-0 shadow-xl mb-4">
-        <h2 className="text-3xl font-bold mb-4">¿Listo para ayudar?</h2>
-        <p className="text-white/80 mb-8 max-w-xl mx-auto">
-          Únete hoy a la red de cuidado animal más grande de Medellín. Es gratis.
-        </p>
-        {/* Uso del componente SignUpButton de Clerk, que encapsula la lógica de autenticación (modal pop-up). */}
-
-        <SignUpButton mode="modal">
-          <button className="bg-[#C9E9FF] text-[#4a3426] px-10 py-4 rounded-full font-bold hover:bg-white transition transform hover:scale-105 shadow-lg">
-            Crear Cuenta Gratis
-          </button>
-        </SignUpButton>
       </section>
 
     </div>

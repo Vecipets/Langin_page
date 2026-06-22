@@ -1,132 +1,177 @@
 "use client";
 
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { FaBell, FaMapMarkedAlt, FaHeart, FaHome, FaBars, FaTimes } from "react-icons/fa";
-import {
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
-const Navbar = () => {
+export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Bloqueo de scroll cuando el menú está abierto
+  // Bloquea el scroll de la pantalla cuando el menú móvil está abierto
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
   }, [isMobileMenuOpen]);
 
+  // 💡 SOLUCIÓN DE ORO: Si la ruta actual es diferente del inicio ("/"), no renderiza nada.
+  // Esto elimina por completo el choque visual en /alertas, /mapa, etc.
+  if (pathname !== "/") {
+    return null;
+  }
+
   const closeMenu = () => setIsMobileMenuOpen(false);
 
+  // Función para evaluar y estilizar los enlaces activos e interacciones
   const getLinkClass = (path: string, isMobile = false) => {
     const isActive = pathname === path;
-    const base = "flex items-center gap-2 transition-all duration-300 font-medium cursor-pointer";
-
+    const base = "flex items-center gap-2 font-extrabold transition-all duration-200 text-sm";
+    
     if (isMobile) {
-      return `${base} w-full p-3 rounded-xl text-lg ${
-        isActive ? "bg-white text-[#4a3426] font-bold shadow-sm" : "text-[#4a3426] hover:bg-white/30"
+      return `${base} w-full rounded-2xl p-4 text-lg ${
+        isActive 
+          ? "bg-[#5E7BC4] text-white shadow-md" 
+          : "text-[#17323a] hover:bg-slate-100 hover:text-[#5E7BC4]"
       }`;
     }
-    return `${base} ${
-      isActive
-        ? "text-white font-extrabold scale-110 border-b-2 border-white pb-1"
-        : "text-[#4a3426] hover:text-[#4a3426]/70 hover:scale-105"
+    
+    return `${base} relative py-2 ${
+      isActive 
+        ? "text-[#5E7BC4] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#5E7BC4] after:rounded-full" 
+        : "text-[#17323a] hover:text-[#5E7BC4]"
     }`;
   };
 
   return (
-    <>
-      {/* NAVBAR STICKY */}
-      <nav className="sticky top-0 z-50 w-full h-[70px] bg-[#C9E9FF] text-[#4a3426] shadow-md px-6 flex items-center justify-between">
+    <nav className="w-full bg-white border-b border-[var(--color-vecipets-card-border)] px-4 py-4 sm:px-10 sm:lg:px-16 sticky top-0 left-0 right-0 z-50 shadow-xs">
+      <div className="mx-auto max-w-7xl flex items-center justify-between">
         
-        {/* LOGO */}
-        <div className="relative z-50 flex items-center">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Image src="/logo.png" alt="Logo" width={45} height={45} className="object-contain" />
-            <span className="text-xl font-black tracking-tight">VeciPets</span>
-          </Link>
-        </div>
-
-        {/* BOTÓN HAMBURGUESA (MÓVIL) */}
-        <div className="md:hidden z-50">
-          <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-2xl p-2 text-[#4a3426] hover:bg-black/5 rounded-full transition focus:outline-none"
-          >
-            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-
-        {/* MENÚ ESCRITORIO */}
-        <ul className="hidden md:flex items-center gap-8">
-          <NavLinks getLinkClass={getLinkClass} />
-          {/* CORRECCIÓN APLICADA: w-px en lugar de w-[1px] */}
-          <div className="h-6 w-px bg-[#4a3426]/20 mx-2"></div>
-          <AuthButtons />
-        </ul>
-      </nav>
-
-      {/* MENÚ MÓVIL (OVERLAY) */}
-      <div 
-        /* CORRECCIÓN APLICADA: pt-20 en lugar de pt-[80px] */
-        className={`fixed inset-0 bg-[#C9E9FF] z-40 flex flex-col pt-20 px-6 gap-6 transition-transform duration-300 ease-in-out md:hidden ${
-          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <ul className="flex flex-col gap-2 w-full h-full overflow-y-auto pb-10">
-          <NavLinks getLinkClass={(path: string) => getLinkClass(path, true)} onClick={closeMenu} />
-            <hr className="border-[#4a3426]/20 my-2" />
-            <div className="flex flex-col gap-4 w-full">
-               <AuthButtons isMobile={true} onClick={closeMenu} />
-            </div>
-        </ul>
-      </div>
-    </>
-  );
-};
-
-// --- COMPONENTES AUXILIARES ---
-
-const NavLinks = ({ getLinkClass, onClick }: { getLinkClass: any, onClick?: () => void }) => (
-  <>
-    <li><Link href="/" className={getLinkClass("/")} onClick={onClick}><FaHome /> <span>Inicio</span></Link></li>
-    <li><Link href="/alertas" className={getLinkClass("/alertas")} onClick={onClick}><FaBell /> <span>Alertas</span></Link></li>
-    <li><Link href="/mapa" className={getLinkClass("/mapa")} onClick={onClick}><FaMapMarkedAlt /> <span>Mapa</span></Link></li>
-    <li><Link href="/cuidado" className={getLinkClass("/cuidado")} onClick={onClick}><FaHeart /> <span>Cuidado</span></Link></li>
-  </>
-);
-
-const AuthButtons = ({ isMobile = false, onClick }: { isMobile?: boolean, onClick?: () => void }) => (
-  <>
-    <SignedOut>
-      <div className={`flex ${isMobile ? "flex-col gap-3 w-full" : "gap-4 items-center"}`}>
-        <SignInButton mode="modal">
-          <button onClick={onClick} className={`font-bold rounded-xl border-2 border-[#4a3426] transition-all ${isMobile ? "w-full py-3 bg-transparent" : "px-4 py-1.5 hover:bg-white text-sm"}`}>Ingresar</button>
-        </SignInButton>
-        <SignUpButton mode="modal">
-          <button onClick={onClick} className={`font-bold rounded-xl border-2 border-[#4a3426] transition-all ${isMobile ? "w-full py-3 bg-[#4a3426] text-white" : "px-4 py-1.5 bg-[#4a3426] text-white hover:bg-[#3a281e] text-sm"}`}>Registrarse</button>
-        </SignUpButton>
-      </div>
-    </SignedOut>
-
-    <SignedIn>
-      <div className={`flex items-center ${isMobile ? "flex-col-reverse gap-6 w-full mt-4" : "gap-4"}`}>
-        <Link href="/reportar" onClick={onClick} className={`font-bold flex items-center gap-2 rounded-full transition hover:scale-105 ${isMobile ? "bg-red-500 text-white w-full justify-center py-3 shadow-md" : "bg-red-500 text-white px-4 py-1.5 text-sm shadow-sm"}`}>
-          <span>📢</span> Reportar
+        {/* ================= LADO IZQUIERDO: BRANDING + NUEVO ES LOGAN AGRANDADO ================= */}
+        <Link href="/" onClick={closeMenu} className="flex items-center gap-3 select-none group">
+          {/* Contenedor del Logo Agrandado */}
+          <div className="w-12 h-12 flex items-center justify-center transition duration-200 group-hover:scale-105 shrink-0">
+            <img 
+              src="/logo.svg" 
+              alt="VeciPets" 
+              width={48}
+              height={48}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          
+          {/* Bloque apilado de Texto: Nombre de marca + Eslogan */}
+          <div className="flex flex-col justify-center">
+            <span className="font-black text-2xl text-[#17323a] tracking-tight leading-none transition-colors group-hover:text-[#5E7BC4]">
+              VeciPets
+            </span>
+            {/* ✨ Eslogan Oficial integrado en alta definición */}
+            <span className="text-[10px] font-black text-[#5E7BC4] tracking-wider uppercase mt-1 leading-none select-none">
+              Unidos por cada huella
+            </span>
+          </div>
         </Link>
-        <div className="flex items-center gap-3">
-            {isMobile && <span className="font-semibold text-[#4a3426]">Mi Perfil:</span>}
-            <UserButton afterSignOutUrl="/" />
-        </div>
-      </div>
-    </SignedIn>
-  </>
-);
 
-export default Navbar;
+        {/* ================= CENTRO: ENLACES ESCRITORIO ================= */}
+        <div className="hidden md:flex items-center gap-8">
+          <Link href="/" className={getLinkClass("/")}>Inicio</Link>
+          <Link href="/alertas" className={getLinkClass("/alertas")}>Alertas</Link>
+          <Link href="/mapa" className={getLinkClass("/mapa")}>Mapa interactivo</Link>
+        </div>
+
+        {/* ================= LADO DERECHO: AUTENTICACIÓN / ACCIONES ================= */}
+        <div className="hidden md:flex items-center gap-4">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="px-5 py-2.5 rounded-xl text-xs font-black text-[#17323a] bg-slate-100 hover:bg-slate-200/80 transition cursor-pointer">
+                Iniciar sesión
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="px-5 py-2.5 rounded-xl text-xs font-black text-white bg-[#5E7BC4] hover:brightness-105 shadow-sm transition cursor-pointer">
+                Registrarse
+              </button>
+            </SignUpButton>
+          </SignedOut>
+
+          <SignedIn>
+            <Link 
+              href="/reportar" 
+              className="inline-flex items-center justify-center bg-[#F3B26C] hover:brightness-105 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-sm transition-all"
+            >
+              🐾 Registrar Mascota
+            </Link>
+            <div className="border-l border-[var(--color-vecipets-card-border)] pl-4 h-6 flex items-center">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
+        </div>
+
+        {/* ================= BOTÓN MENÚ MÓVIL (HAMBURGUESA) ================= */}
+        <button 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 rounded-xl bg-slate-50 border border-[var(--color-vecipets-card-border)] md:hidden text-[#17323a] focus:outline-none cursor-pointer"
+          aria-label="Toggle Menu"
+        >
+          {isMobileMenuOpen ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+
+      </div>
+
+      {/* ================= DESPLEGABLE MENÚ MÓVIL RESPONSIVO ================= */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 top-[73px] bg-white z-40 flex flex-col p-6 animate-in fade-in slide-in-from-top duration-200 md:hidden border-t border-[var(--color-vecipets-card-border)]">
+          
+          <div className="flex flex-col gap-3 flex-grow">
+            <Link href="/" className={getLinkClass("/", true)} onClick={closeMenu}>
+              Inicio
+            </Link>
+            <Link href="/alertas" className={getLinkClass("/alertas", true)} onClick={closeMenu}>
+              Alertas
+            </Link>
+            <Link href="/mapa" className={getLinkClass("/mapa", true)} onClick={closeMenu}>
+              Mapa interactivo
+            </Link>
+          </div>
+
+          <div className="border-t border-[var(--color-vecipets-card-border)] pt-6 flex flex-col gap-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button onClick={closeMenu} className="w-full py-3.5 bg-slate-100 rounded-2xl text-sm font-black text-[#17323a] hover:bg-slate-200 transition cursor-pointer">
+                  Iniciar sesión
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button onClick={closeMenu} className="w-full py-3.5 bg-[#5E7BC4] rounded-2xl text-sm font-black text-white text-center shadow-md transition cursor-pointer">
+                  Registrarse
+                </button>
+              </SignUpButton>
+            </SignedOut>
+
+            <SignedIn>
+              <div className="flex items-center justify-between bg-slate-50 border border-[var(--color-vecipets-card-border)] p-4 rounded-2xl">
+                <span className="font-bold text-sm text-[#17323a]">Mi Perfil:</span>
+                <UserButton afterSignOutUrl="/" />
+              </div>
+              <Link 
+                href="/reportar" 
+                onClick={closeMenu}
+                className="w-full py-4 bg-[#F3B26C] text-white text-center font-black rounded-2xl shadow-md transition"
+              >
+                🐾 Registrar Mascota
+              </Link>
+            </SignedIn>
+          </div>
+
+        </div>
+      )}
+    </nav>
+  );
+}

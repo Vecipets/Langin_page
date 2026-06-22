@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -38,6 +38,18 @@ function ClickHandler({ onLocationSelect }: { onLocationSelect: (coords: [number
       onLocationSelect(coords); 
     },
   });
+  return null;
+}
+
+function RecenterMap({ selectedLocation }: { selectedLocation: [number, number] | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (selectedLocation) {
+      map.flyTo(selectedLocation, 15, { duration: 0.8 });
+    }
+  }, [map, selectedLocation]);
+
   return null;
 }
 
