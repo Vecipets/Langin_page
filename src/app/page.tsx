@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import FeaturesSection from "@/components/layout/FeaturesSection";
 import HowItWorksSection from "@/components/layout/HowItWorksSection";
 import TargetAudienceSection from "@/components/layout/TargetAudienceSection";
 import PeluditosSection from "@/components/sections/PeluditosSection";
 import { IMAGENES_LANDING } from "@/contexts/assets";
+import { useState } from "react";
 
 export default function HomePage() {
   const [formData, setFormData] = useState({ nombre: "", correo: "" });

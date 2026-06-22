@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { useState } from "react";
 
 export default function CTASection() {
   const [formData, setFormData] = useState({ nombre: "", correo: "" });

@@ -1,7 +1,7 @@
 "use client";
 
+import { IMAGENES_LANDING } from "@/contexts/assets";
 import { useEffect, useState } from "react";
-import { IMAGENES_LANDING } from "@/contexts/assets"; 
 
 export default function HowItWorksSection() {
   const [currentStep, setCurrentStep] = useState(2); // Por defecto en el paso 03 para validar tu vista

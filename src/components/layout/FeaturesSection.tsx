@@ -1,7 +1,7 @@
 "use client";
 
 // 1. Importas tu diccionario centralizado:
-import { IMAGENES_LANDING } from "@/contexts/assets"; 
+import { IMAGENES_LANDING } from "@/contexts/assets";
 
 export default function FeaturesSection() {
   const features = [
